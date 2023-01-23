@@ -3,6 +3,24 @@ import React from "react";
 
 function QuestionItem({ question }) {
   const { id, prompt, answers, correctIndex } = question;
+
+//patch 
+function handleChange(event){
+    let answerTobeChanged = event.target.value
+
+
+fetch(`http://localhost:4800/questions/${id}`,{
+  method:"PATCH",
+  headers:{
+    "Content-Type":"application/json",
+  },
+  body:JSON.stringify({ "correctIndex": answerTobeChanged})
+ })
+ .then((res)=>res.json())
+ .then((data)=>console.log(data))
+  
+}
+
   
   function handleDelete() {
     fetch(`http://localhost:4800/questions/${id}`, {
@@ -33,7 +51,7 @@ function QuestionItem({ question }) {
       <h5>Prompt: {prompt}</h5>
       <label>
         Correct Answer:
-        <select defaultValue={correctIndex}>{options}</select>
+        <select onChange={handleChange} defaultValue={correctIndex}>{options}</select>
       </label>
       <button onClick={handleDelete}>Delete Question</button>
     </li>
